@@ -291,6 +291,21 @@ class MainView extends GLSurfaceView {
 				
 			}
 			
+			@Override public boolean commitText (CharSequence text, int newCursorPosition) {
+				
+				final int charCode = (int) text.charAt(0);
+				if(charCode > 255)
+				{
+					final long time = SystemClock.uptimeMillis ();
+				
+					sendKeyEvent (new KeyEvent (time, time, KeyEvent.ACTION_MULTIPLE, charCode, 0, 0, KeyCharacterMap.VIRTUAL_KEYBOARD, charCode, KeyEvent.FLAG_SOFT_KEYBOARD | KeyEvent.FLAG_KEEP_TOUCH_MODE));
+				
+					return true;
+				}
+				
+				return super.commitText (text,newCursorPosition); 
+			}
+			
 		};
 		
 		return inputConnection;
@@ -346,6 +361,58 @@ class MainView extends GLSurfaceView {
 		
 	}::end::
 	
+	@Override public boolean onKeyMultiple(final int inKeyCode, final int inRepeatCount, KeyEvent event) {
+		
+		final MainView me = this;
+		
+		::if (ANDROID_TARGET_SDK_VERSION > 11)::if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR1 && (event.isGamepadButton (inKeyCode) || (inKeyCode >= 19 && inKeyCode <=22))) {
+			
+			if (event.getRepeatCount () == 0) {
+				
+				final int deviceId = event.getDeviceId ();
+				
+				queueEvent (new Runnable () {
+					
+					public void run () {
+						
+						me.HandleResult (Lime.onJoyChange (deviceId, inKeyCode, true));
+						
+					}
+					
+				});
+				
+			}
+			
+			if (inKeyCode < 19 || inKeyCode > 22) {
+				
+				return true;
+				
+			}
+			
+		}::end::
+		
+		final int keyCode = event.getScanCode();
+		final int charCode = event.getKeyCode();
+		
+		if (keyCode != 0) {
+			
+			queueEvent (new Runnable () {
+				
+				public void run () {
+					
+					me.HandleResult (Lime.onKeyChange (keyCode, charCode, false));
+					
+				}
+				
+			});
+			
+			return true;
+			
+		}
+		
+		return super.onKeyMultiple (inKeyCode, inRepeatCount, event);
+		
+	}
 	
 	@Override public boolean onKeyDown (final int inKeyCode, KeyEvent event) {
 		
