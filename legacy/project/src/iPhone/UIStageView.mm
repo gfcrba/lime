@@ -481,6 +481,11 @@ static std::string nmeTitle;
          unichar c = [string characterAtIndex: i];
          unichar v = [NMEView translateASCIICodeToKeyCode: c];
 
+			Event text_input(etTextInput);
+			text_input.code = c;
+			text_input.value = v;
+			mStage->OnEvent(text_input);
+			
          Event key_down(etKeyDown);
          key_down.code = c;
          key_down.value = v;
