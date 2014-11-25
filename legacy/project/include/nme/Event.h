@@ -47,6 +47,7 @@ enum EventType
    
    etRenderContextLost, // 32
    etRenderContextRestored, // 33
+	etTextInput, //34
 };
 
 enum EventFlags

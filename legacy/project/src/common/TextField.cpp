@@ -588,6 +588,24 @@ void TextField::OnChange()
    }
 }
 
+void TextField::OnTextInput(Event &inEvent)
+{
+    int code = inEvent.code;
+    bool shift = inEvent.flags & efShiftDown;
+	 if ( (code>27 && code<63000))
+    {
+         if (shift && code > 96 && code < 123)
+         {
+            code -= 32;
+         }
+         DeleteSelection();
+         wchar_t str[2] = {code,0};
+         WString ws(str);
+         InsertString(ws);
+         OnChange();
+         ShowCaret();
+    }
+}
 
 void TextField::OnKey(Event &inEvent)
 {
@@ -683,12 +701,8 @@ void TextField::OnKey(Event &inEvent)
             break;
       }
 
-      if ( (multiline && code=='\n') || (code>27 && code<63000))
+      if ((multiline && code=='\n'))
       {
-         if (shift && code > 96 && code < 123)
-         {
-            code -= 32;
-         }
          DeleteSelection();
          wchar_t str[2] = {code,0};
          WString ws(str);

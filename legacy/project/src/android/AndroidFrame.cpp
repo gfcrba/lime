@@ -333,6 +333,14 @@ public:
       Event evt(etRenderContextRestored);
       HandleEvent(evt);
    }
+	
+	void OnTextInput(int inKeyCode, int inCharCode)
+	{
+      Event key(etTextInput);
+      key.code = inCharCode;
+      key.value = inKeyCode;
+      HandleEvent(key);
+	}
 
    void OnKey(int inKeyCode, int inCharCode, bool inDown)
    {
@@ -880,8 +888,14 @@ JAVA_EXPORT int JNICALL Java_org_haxe_nme_NME_onKeyChange(JNIEnv * env, jobject 
 {
    AutoHaxe haxe("onKey");
    #ifdef HX_LIME
-   if (nme::sStage)
-      nme::sStage->OnKey(keyCode,charCode,down);
+   if (nme::sStage) 
+	{
+		nme::sStage->OnKey(keyCode,charCode,down);
+		if(! down)
+		{
+			nme::sStage->OnTextInput(keyCode,charCode);
+		}
+	}
    #else
    if (nme::sStage)
       nme::sStage->OnKey(code,code,down);

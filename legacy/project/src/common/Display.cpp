@@ -1804,7 +1804,17 @@ void Stage::HandleEvent(Event &inEvent)
          default: break;
       }
    }
-
+	
+   if (inEvent.type==etTextInput)
+   {
+		inEvent.id = mFocusObject ? mFocusObject->id : id;
+		if (mHandler)
+			mHandler(inEvent,mHandlerData);
+		if (mFocusObject)
+			mFocusObject->OnTextInput(inEvent);
+		return;
+	}
+	
    if (inEvent.type==etKeyDown || inEvent.type==etKeyUp)
    {
       inEvent.id = mFocusObject ? mFocusObject->id : id;

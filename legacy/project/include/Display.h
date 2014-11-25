@@ -181,6 +181,7 @@ public:
    virtual bool CaptureDown(Event &inEvent) { return false; }
    virtual void Drag(Event &inEvent) {  }
    virtual void EndDrag(Event &inEvent) { }
+	virtual void OnTextInput(Event &inEvent) { }
    virtual void OnKey(Event &inEvent) { }
    virtual bool FinishEditOnEnter() { return false; }
 

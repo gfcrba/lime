@@ -1253,6 +1253,15 @@ void ProcessEvent(SDL_Event &inEvent)
          sgSDLFrame->ProcessEvent(mouse);
          break;
       }
+	   case SDL_TEXTINPUT:
+	   {
+			Event key(etTextInput);
+			key.value = SDL_GetScancodeFromName(inEvent.text.text);
+			key.code = SDL_GetKeyFromName(inEvent.text.text);
+			AddModStates(key.flags, SDL_GetModState());
+			sgSDLFrame->ProcessEvent(key);
+			break;
+	   }
       case SDL_KEYDOWN:
       case SDL_KEYUP:
       {

@@ -150,6 +150,7 @@ public:
    bool CaptureDown(Event &inEvent);
    void Drag(Event &inEvent);
    void EndDrag(Event &inEvent);
+	void OnTextInput(Event &inEvent);
    void OnKey(Event &inEvent);
    void OnScrollWheel(int inDirection);
    void DeleteSelection();
